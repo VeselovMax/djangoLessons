@@ -4,17 +4,16 @@ from myapp.models import Message
 from .models import Counter
 
 def home(request):
-    return HttpResponse(f"This page has been refreshed x times.")
+    return HttpResponse(f"Home")
 
 def hello(request, name):
     Message.objects.create(name=name)
-    return HttpResponse(f"Hello, {name}!")
+    return render(request, 'hello.html', {'name': name})
 
 def stats(request):
     messages = Message.objects.count()
-    return HttpResponse(f"Greetings: {messages}")
+    return render(request, 'stats.html', {'total_greetings': messages})
 
 def stats_name(request, name):
     messages = Message.objects.filter(name=name)
-    text = "<br>".join([f"{m.name}, {m.created_at}" for m in messages])
-    return HttpResponse(f"Greetings:<br>{text}")
+    return render(request, 'stats_name.html', {'greetings': messages, 'name': name})
